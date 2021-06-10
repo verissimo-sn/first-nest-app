@@ -1,3 +1,4 @@
+import { getConnection } from 'typeorm';
 import {
   Controller,
   Param,
@@ -7,12 +8,20 @@ import {
   Put,
   Delete,
 } from '@nestjs/common';
+
 import { Task } from './shared/task';
 import { TaskService } from './shared/task.service';
+import { Task as taskEntity} from './entities/task.entity';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private taskService: TaskService) {}
+
+  @Get('/db')
+  async getAllTask() {
+    // return getConnection().manager.find(taskEntity);
+    return getConnection().query("SELECT * FROM task");
+  }
 
   @Get()
   async getAll(): Promise<Task[]> {
